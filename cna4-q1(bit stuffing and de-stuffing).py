@@ -1,4 +1,5 @@
 def bit_stuffing(data):
+    flag = "01111110"
     stuffed = ""
     count = 0
 
@@ -13,10 +14,13 @@ def bit_stuffing(data):
         else:
             count = 0
 
-    return stuffed
+    return flag + stuffed + flag
 
 
 def bit_destuffing(data):
+    flag = "01111110"
+    data = data[len(flag):-len(flag)]
+
     destuffed = ""
     count = 0
     i = 0
@@ -28,7 +32,6 @@ def bit_destuffing(data):
             count += 1
 
             if count == 5:
-                
                 if i + 1 < len(data) and data[i + 1] == '0':
                     i += 1
                 count = 0
@@ -40,11 +43,10 @@ def bit_destuffing(data):
     return destuffed
 
 
-
 data = input("Enter the binary data: ")
 
 stuffed_data = bit_stuffing(data)
-print("After Bit Stuffing :", stuffed_data)
+print("After Bit Stuffing   :", stuffed_data)
 
 destuffed_data = bit_destuffing(stuffed_data)
-print("After Bit Destuffing:", destuffed_data)
+print("After Bit Destuffing :", destuffed_data)
