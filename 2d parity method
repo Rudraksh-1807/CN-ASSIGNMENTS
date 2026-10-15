@@ -1,0 +1,92 @@
+#include <stdio.h>
+
+int main() {
+    int rows = 4, cols = 4;
+    int data[4][4], received[4][4];
+    int rowParity[4], colParity[4];
+    int i, j;
+
+    printf("Enter 4x4 data bits:\n");
+
+    for (i = 0; i < rows; i++)
+        for (j = 0; j < cols; j++)
+            scanf("%d", &data[i][j]);
+
+    for (i = 0; i < rows; i++) {
+        rowParity[i] = 0;
+        for (j = 0; j < cols; j++)
+            rowParity[i] ^= data[i][j];
+    }
+
+    for (j = 0; j < cols; j++) {
+        colParity[j] = 0;
+        for (i = 0; i < rows; i++)
+            colParity[j] ^= data[i][j];
+    }
+
+    printf("\nData sent by sender:\n");
+
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++)
+            printf("%d ", data[i][j]);
+        printf("| %d\n", rowParity[i]);
+    }
+
+    printf("-----------------\n");
+
+    for (j = 0; j < cols; j++)
+        printf("%d ", colParity[j]);
+
+    printf("\n\nEnter received data:\n");
+
+    for (i = 0; i < rows; i++)
+        for (j = 0; j < cols; j++)
+            scanf("%d", &received[i][j]);
+
+    int errorRow = -1, errorCol = -1;
+
+    for (i = 0; i < rows; i++) {
+        int parity = 0;
+
+        for (j = 0; j < cols; j++)
+            parity ^= received[i][j];
+
+        if (parity != rowParity[i])
+            errorRow = i;
+    }
+
+    for (j = 0; j < cols; j++) {
+        int parity = 0;
+
+        for (i = 0; i < rows; i++)
+            parity ^= received[i][j];
+
+        if (parity != colParity[j])
+            errorCol = j;
+    }
+
+    if (errorRow == -1 && errorCol == -1) {
+        printf("\nNo error detected.\n");
+    }
+    else if (errorRow != -1 && errorCol != -1) {
+        printf("\nError at Row %d, Column %d\n",
+               errorRow + 1, errorCol + 1);
+
+        received[errorRow][errorCol] ^= 1;
+
+        printf("Error corrected.\n");
+
+        printf("\nCorrected data:\n");
+
+        for (i = 0; i < rows; i++) {
+            for (j = 0; j < cols; j++)
+                printf("%d ", received[i][j]);
+            printf("\n");
+        }
+    }
+    else {
+        printf("\nMultiple-bit error detected.\n");
+    }
+
+    return 0;
+}
