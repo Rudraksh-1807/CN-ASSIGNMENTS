@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char data[100], key[30];
+    int i, j, n, m;
+    char temp[130];
+
+    printf("Enter data: ");
+    scanf("%s", data);
+
+    printf("Enter generator: ");
+    scanf("%s", key);
+
+    n = strlen(data);
+    m = strlen(key);
+
+    strcpy(temp, data);
+
+    for (i = 0; i < m - 1; i++)
+        strcat(temp, "0");
+
+    for (i = 0; i <= n - 1; i++) {
+        if (temp[i] == '1') {
+            for (j = 0; j < m; j++) {
+                temp[i + j] =
+                    (temp[i + j] == key[j]) ? '0' : '1';
+            }
+        }
+    }
+
+    printf("CRC: ");
+    for (i = n; i < n + m - 1; i++)
+        printf("%c", temp[i]);
+
+    printf("\n");
+
+    printf("Transmitted data: %s", data);
+    for (i = n; i < n + m - 1; i++)
+        printf("%c", temp[i]);
+
+    return 0;
+}
