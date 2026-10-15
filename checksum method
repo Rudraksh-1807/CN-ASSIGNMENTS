@@ -1,0 +1,49 @@
+#include <stdio.h>
+
+int main()
+{
+    int n, i;
+    unsigned int a[20], sum = 0, ch, rsum = 0;
+
+    printf("SENDER\n");
+    printf("Enter number of data: ");
+    scanf("%d", &n);
+
+    printf("Enter data:\n");
+    for(i = 0; i < n; i++)
+        scanf("%x", &a[i]);
+
+    for(i = 0; i < n; i++)
+        sum += a[i];
+
+    while(sum > 0xFFFF)
+        sum = (sum & 0xFFFF) + (sum >> 16);
+
+    ch = (~sum) & 0xFFFF;
+
+    printf("Checksum = %04X\n", ch);
+
+    printf("\nRECEIVER\n");
+    printf("Enter received data:\n");
+
+    for(i = 0; i < n; i++)
+        scanf("%x", &a[i]);
+
+    printf("Enter checksum: ");
+    scanf("%x", &ch);
+
+    rsum = ch;
+
+    for(i = 0; i < n; i++)
+        rsum += a[i];
+
+    while(rsum > 0xFFFF)
+        rsum = (rsum & 0xFFFF) + (rsum >> 16);
+
+    if(rsum == 0xFFFF)
+        printf("No error detected\n");
+    else
+        printf("Error detected\n");
+
+    return 0;
+}
