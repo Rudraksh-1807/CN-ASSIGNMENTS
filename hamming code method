@@ -1,0 +1,46 @@
+def encode(data):
+    d1, d2, d3, d4 = map(int, data)
+
+    p1 = d1 ^ d2 ^ d4
+    p2 = d1 ^ d3 ^ d4
+    p3 = d2 ^ d3 ^ d4
+
+    code = [p1, p2, d1, p3, d2, d3, d4]
+    return code
+
+
+def decode(code):
+    s1 = code[0] ^ code[2] ^ code[4] ^ code[6]
+    s2 = code[1] ^ code[2] ^ code[5] ^ code[6]
+    s3 = code[3] ^ code[4] ^ code[5] ^ code[6]
+
+    error_pos = s1 + 2 * s2 + 4 * s3
+
+    if error_pos:
+        print("Error at position:", error_pos)
+        code[error_pos - 1] ^= 1
+        print("Corrected code:", "".join(map(str, code)))
+    else:
+        print("No error detected")
+
+    data = [code[2], code[4], code[5], code[6]]
+    print("Original data:", "".join(map(str, data)))
+
+
+data = input("Enter 4 data bits: ")
+
+if len(data) == 4 and all(b in "01" for b in data):
+    code = encode(data)
+    print("Encoded code:", "".join(map(str, code)))
+
+    pos = int(input("Enter error position (0 for none, 1-7 for error): "))
+
+    received = code.copy()
+
+    if 1 <= pos <= 7:
+        received[pos - 1] ^= 1
+
+    print("Received code:", "".join(map(str, received)))
+    decode(received)
+else:
+    print("Invalid input! Enter exactly 4 binary bits.")
