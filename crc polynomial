@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char data[100], divisor[30];
+    char temp[130];
+    int n, m, i, j;
+
+    printf("Enter data: ");
+    scanf("%s", data);
+
+    printf("Enter generator polynomial: ");
+    scanf("%s", divisor);
+
+    n = strlen(data);
+    m = strlen(divisor);
+
+    strcpy(temp, data);
+
+    for (i = 0; i < m - 1; i++)
+        strcat(temp, "0");
+
+    for (i = 0; i < n; i++) {
+        if (temp[i] == '1') {
+            for (j = 0; j < m; j++) {
+                if (temp[i + j] == divisor[j])
+                    temp[i + j] = '0';
+                else
+                    temp[i + j] = '1';
+            }
+        }
+    }
+
+    printf("Remainder: ");
+
+    for (i = n; i < n + m - 1; i++)
+        printf("%c", temp[i]);
+
+    printf("\n");
+
+    return 0;
+}
