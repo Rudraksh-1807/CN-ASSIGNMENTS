@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+
+int main(){
+    string data;
+    cout << "Enter data bits: ";
+    cin >> data;
+
+    int ones = 0;
+    for(char bit: data) if(bit == '1') ones++;
+    int parity_bit = ones%2;
+    cout << "Parity bit: " << parity_bit << endl;
+    string transmitted = data + char('0' + parity_bit);
+
+    cout << "Transmitted data: " << transmitted << endl;
+
+    string received;
+    cout << "Enter received data: ";
+    cin >> received;
+
+    ones = 0;
+    for(char bit : received){
+        if(bit == '1') ones++;
+    }
+
+    if(ones%2 == 0){
+        cout << "No error detected. " << endl;
+    } else {
+        cout << "Error detected!" << endl;
+    }
+
+    return 0;
+}
